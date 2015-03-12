@@ -124,4 +124,7 @@ $( document ).ready(function() {
 		csvDispCount: 3 
 	});
 	
+	$('#header .main_dropdown').hover( function() { $('#header .main_dropdown .dropdown-menu').toggle(); } );
+	
 });
+

@@ -10,7 +10,7 @@ body{ font-family:Arial, Helvetica, sans-serif; background:#f7f7f7;}
 
 #header{float:left; width:100%; padding:17px 0 0 0; background: #f7f7f7}
 #header .profile_header{ padding:0px;}
-#header .login_sec{float:right; width:390px; padding:0 0 20px 0; margin:0 -3px 0 0;}
+#header .login_sec{float:right; width:590px; padding:0 0 20px 0; margin:0 -3px 0 0;}
 #header .login_sec .col{float:left; width:150px; margin:0 37px 0 0;}
 #header .login_sec .col a{float:left; text-decoration:none; font-size:13px; line-height:15px; color:#525d63;}
 #header .login_sec .col a img{ vertical-align:bottom;}

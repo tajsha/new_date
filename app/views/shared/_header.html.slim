@@ -1,25 +1,41 @@
 - logged_in_user = current_user
 - if logged_in_user
-  #header
+  #header style="height: 30px;"
     .wrapper
       .login_sec
-        .col
+        .main_dropdown style="float: right;width: 60%;margin: 0 37px 0 0;"
           a href="" 
             =image_tag "login_icon1.png"
-            span 
+            span style="font-size: 13px;line-height: 15px;color: #525d63;padding:0px 5px 0px 5px;"
               'Welcome, 
               = logged_in_user.username
             =image_tag "profile_link_img.png", class: 'img'
+		  ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="position:relative;"
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="#{user_url(current_user)}"
+				'My Profile
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="#{follow_user_url(current_user)}"
+				'Favorites
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="#"
+				'Post A Date
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="#"
+				'Settings
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="#"
+				'Upload Photo
+			li role="presentation"
+			  a role="menuitem" tabindex="-1" href="/logout"
+				'Logout
         .col.col2
           a href="/conversations"
             =image_tag "login_icon2.png"
             span Messages
             / =image_tag "login_icon4.png", class: 'img4'
             span class="messbg_icon" =unread_messages(current_user)
-        .col.col3
-          a href="/logout" 
-            =image_tag "login_icon3.png", class: 'img3'
-            span Logout
+    
 #menu_sec
   .wrapper
     .logo
