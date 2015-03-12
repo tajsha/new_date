@@ -1,0 +1,14 @@
+Congratulations, <%= @user.username %>!
+
+You made the right choice. More relationships begin with a conversation at AreYouTaken.com than any other dating site. As with anywhere you meet new people, make sure you exercise caution when getting to know people. Check out our safety tips for more details. 
+
+Please review your subscription information and save a copy for your records.
+
+Username: <%= @user.username %>
+Payment Type: <% if @user.subscription.stripe_customer_token.nil? %>PayPal <% end %> <% if @user.subscription.paypal_recurring_profile_token.nil? %>Credit Card <% end %>
+Amount: <%= number_to_currency @user.subscription.plan.price %>
+Transaction Date: <%= @user.subscription.created_at %>
+Subscription Package: <%= @user.subscription.plan.name %>
+Currently Paid Through: <%= @user.subscription.cancellation_date %>
+
+At the end of your initial subscription, and each renewal period thereafter, your subscription package will automatically renew at <%= number_to_currency @user.subscription.plan.price %>, until you cancel.

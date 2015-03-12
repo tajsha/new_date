@@ -1,0 +1,105 @@
+<h1><%= @user.username %></h1>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.parent-container').magnificPopup({
+        delegate: 'a',
+        type: 'inline',
+        gallery: { enabled: true }
+    });
+});
+</script>
+
+<div class="parent-container">
+    <% @user.photos.each do |photo| %>
+        <%= link_to image_tag(photo.image_url(:thumb)), "#" + dom_id(photo) %>
+        <div id="<%= dom_id(photo) %>" class="mfp-hide">
+	<center>
+<%= image_tag(photo.image_url(:popup)) %>
+</center>
+<% if current_user?(@user) %>
+            <%= button_to('Set as Profile Image', [:avatar, photo]) %><p>
+			<%= button_to "remove", photo, :confirm => 'Are you sure?', :method => :delete %>
+			<% end %><p>
+				<% unless current_user?(@user) %>
+				Send a message to
+
+				 <%= @user %>
+				 <%= form_tag({controller: "messages", action: "create"}, method: :post) do %>
+				  <%= label_tag :subject %>
+				  <%= text_field_tag :subject %>
+				  <%= label :body, "Message text" %>
+				  <%= text_area_tag :body %>
+				  <%= hidden_field_tag(:user, params[:id]) %>
+				  <%= submit_tag 'Send message', class: "btn btn-primary" %>
+				 <% end %>
+				<% end %>
+        </div>
+    <% end %>
+</div>
+</p>
+
+  <%= link_to "Add a Photo", new_photo_path(:gallery_id => @gallery) %>
+
+
+<p>AVATAR<p>
+	<%= image_tag @user.avatar.image_url(:profile) %>
+<P>
+
+
+<% unless current_user?(@user) %>
+  <div id="follow_form">
+  <% if current_user.following?(@user) %>
+    <%= render 'unfollow' %>
+  <% else %>
+    <%= render 'follow' %>
+  <% end %>
+  </div>
+<% end %>
+
+<%= link_to "Message Me", new_user_message_path(@user), :class => "button" %>
+<%= link_to "Ask User Out", askout_user_messages_path(@user), :class => "button" %>
+
+
+<h2>Basics</h2>
+<p>Age: <%= @user.age %></p>
+<p>Location: <%= @user.location.city%>, <%= @user.location.state%></p>
+<p>Sexuality: <%= @user.sexuality %></p>
+  <p>Gender: <%= @user.gender %></p>
+  <p>Height: <%= best_in_place @user, :feet %>'<%= best_in_place @user, :inches %></p>
+  <p>Children: <%= best_in_place @user, :children, nil: 'Do you have or wants kids?', :type => :select, :collection => [["Yes, they live with me", "Yes, they live with me"], ["I want kids now", "I want kids now"], ["I want kids now", "I want one someday"], ["Not for me", "Not for me"]] %></p>
+  <p>Religion: <%= best_in_place @user, :religion, nil: 'What is your faith?', :type => :select, :collection => [["Agnostic", "Agnostic"], ["Atheist", "Atheist"], ["Christian", "Christian"], ["Catholic", "Catholic"], ["Buddhist", "Buddhist"], ["Hindu", "Hindu"], ["Jewish", "Jewish"], ["Muslim", "Muslim"], ["Spiritual without affiliation", "Spiritual without affiliation"], ["Other", "Other"], ["None", "None"], ["Prefer not to say", "Prefer not to say"]] %><br> 
+(<%= best_in_place @user, :religion, nil: 'How important is this to you?', :type => :select, :collection => [["Very Important", "Very Important"], ["Somewhat Important", "Somewhat Important"], ["Not Important", "Not Important"]] %>)</p>
+  <p>Career: <%= best_in_place @user, :career %></p>
+  <p>Education: <%= best_in_place @user, :education, nil: 'What is your education level?', :type => :select, :collection => [["High school", "High school"], ["Some college", "Some college"], ["Undergraduate", "Undergraduate"], ["Bachelor's", "Bachelor's"], ["Master's", "Master's"], ["PhD", "PhD"], ["Business school", "Business school"], ["Law school", "Law school"], ["Medical school", "Medical school"]] %></p>
+  <p>Ethnicity: <%= best_in_place @user, :ethnicity, nil: 'What is your ethnicity?', :type => :select, :collection => [["Asian", "Asian"], ["Biracial", "Biracial"], ["Indian", "Indian"], ["Hispanic/Latin", "Hispanic/Latin"], ["Middle Eastern", "Middle Eastern"], ["Native American", "Native American"], ["Pacific Islander", "Pacific Islander"], ["White", "White"], ["Other", "Other"]] %></p>
+  <p>How much do you drink?: <%= best_in_place @user, :user_drink, nil: 'Select how much you drink', :type => :select, :collection => [["Often drinks", "Often drinks"], ["Sometimes drinks", "Sometimes drinks"], ["Never drinks", "Never drinks"]] %></p>
+  <p>How much do you smoke?: <%= best_in_place @user, :user_smoke, nil: 'Select how often you smoke', :type => :select, :collection => [["Often smokes", "Often smokes"], ["Sometimes smokes", "Sometimes smokes"], ["Never smoke", "Never smoke"]] %></p>
+
+
+<h3>About Me</h3>
+  <p>About Me: <%= best_in_place @user, :about_me, :type => :textarea %></p>
+
+<h4>Ask User A Question</h4>
+<p>			<%= link_to "Ask Me", new_question_path(:user_id => @user.id), :class => "button" %>
+	<p>
+	
+		<p>
+<h5>SHOW QUESTIONS</H5>
+	<div id="questions">
+	<% @question.select(&:answer?).each do |question| %>
+	Question: <%= question.question %><br>
+	Answer: <%= question.answer %><br><br>
+	<% end %>
+	<%= will_paginate @question %>
+	</div>
+	
+	Show Dates Proposed:
+	
+	<% if @user.letsgos.any? %>
+		Dates (<%= @user.letsgos.count %>)
+		<%= render @letsgos %>
+		<%= will_paginate @letsgos %>
+		<% end %>
+		<% if current_user?(@user) %>
+		<%= render 'letsgos/form' %>
+		<% end %>

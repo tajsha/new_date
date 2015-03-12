@@ -1,0 +1,117 @@
+<div class="col-9">
+ <%= form_for @subscription do |f| %>
+  <div class="col-3">
+    <div class="plan">
+      <%= image_tag "/assets/best1.png" %>
+
+      <h1><%= radio_button_tag "subscription[plan_id]", '12', (@subscription.plan.id == 12 ? true : false) %><label for="plan_id_12"><span><span></span></span></label>$13.50 a year</h1>
+      <h2>12-Month Membership</h2>
+      <p>2 FREE months!</p>
+      <p>Send unlimited messages to any user</p>
+	  <p>Receive and read unlimited messages</p>
+	  <p>Make real connections</p>
+    </div>
+    <div class="plan">
+      <h1><%= radio_button_tag "subscription[plan_id]", '1', (@subscription.plan.id == 1 ? true : false) %><label for="plan_id_1"><span><span></span></span></label>$1.35 a month</h1>
+      <h2>1-Month Membership</h2>
+      <p>Send unlimited messages to any user</p>
+	  <p>Receive and read unlimited messages</p>
+      <p>View all locals in your area</p>
+      <p>Book the dates you like</p>
+	  <p>Make real connections</p>
+    </div>
+  </div>
+  <div class="sm_form_container">
+    <div class="row">
+      <div class="field">
+        <h1>Signing up for "<%= @subscription.plan.name %>"</h1>
+        <p>Includes <strong><%= @subscription.plan.length %> length</strong> for only <strong><%= number_to_currency @subscription.plan.price %></strong> per month!</p>
+     </div>
+    </div> 
+    <div class="row">
+      <div class="field">
+    
+      <% if @subscription.errors.any? %>
+        
+          <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+          <ul>
+          <% @subscription.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        
+      <% end %>
+    
+      <%= f.hidden_field :stripe_card_token %>
+      <%= f.hidden_field :paypal_customer_token %>
+      <%= f.hidden_field :paypal_payment_token %>
+    
+      <% unless @subscription.payment_provided? %>
+      
+        <%= radio_button_tag :pay_with, :card, true %>
+        <%= label_tag :pay_with_card do %>
+          <%= image_tag "visa.png" %>
+          <%= image_tag "mastercard.png" %>
+          <%= image_tag "discover.png" %>
+          <%= image_tag "american_express.png" %>
+          <%= image_tag "jcb.png" %>
+        <% end %>
+        <%= radio_button_tag :pay_with, :paypal %>
+        <%= label_tag :pay_with_paypal do %>
+          <%= image_tag "paypal.png" %>
+        <% end %>
+      <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div id="paypal_checkout" style="display:none">
+	   <%= link_to image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), paypal_checkout_path(plan_id: @subscription.plan_id) %>
+	
+      </div>
+    </div>
+    <div id="billing_fields">
+      <div class="field">
+    	  <%= f.hidden_field :user_id, :value => current_user.id %> 
+          <%= f.hidden_field :email, :value => current_user.email  %>
+        </div>
+        <% if @subscription.payment_provided? %>
+          Payment has been provided. Click "Subscribe" to complete the subscription.
+        <% else %>
+      <div class="row">
+          <div class="field">
+            <%= label_tag :card_owner, "Name (as it appears on the card)" %>
+            <%= text_field_tag :card_owner, nil, name: nil %>
+          </div>
+          <div class="field">
+            <%= label_tag :card_number, "Credit Card Number" %>
+            <%= text_field_tag :card_number, nil, name: nil %>
+          </div>
+      </div>
+      <div class="row">
+          <div class="field">
+            <%= label_tag :card_code, "Security Code on Card (CVV)" %>
+            <%= text_field_tag :card_code, nil, name: nil %>
+          </div>
+          <div class="field" id="expiration">
+            <%= label_tag :card_month, "Card Expiration" %><br />
+            <%= select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"} %>
+            <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"} %>
+          </div>
+        <% end %>
+        <div id="stripe_error">
+          <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field"><%= f.submit "Subscribe", class: 'btn', style: "width: 40%; margin-left: 165px"  %></div>
+      </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $("input[name='subscription[plan_id]']").on('change', function(){
+      window.location.assign("<%= new_subscription_url %>?plan_id="+$(this).val());
+  });
+
+</script>

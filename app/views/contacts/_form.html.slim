@@ -1,0 +1,10 @@
+legend Contact Us
+= form_for Contact.new, input_html: {role: 'form'} do |f| 
+  .form-group
+    = f.label :email 
+    = f.text_field :email, class: 'form-control', required: true
+  .form-group
+    = f.label :content, "Message"
+    = f.text_area :content, class: 'form-control', required: true
+  .form-group
+  	= f.submit "Send Message", class: 'btn btn-success' 

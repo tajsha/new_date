@@ -1,0 +1,31 @@
+- user = current_user
+- receipts.each do |receipt|
+  - message = receipt.message
+  - is_unread = message.is_unread?(user)
+  - sender = message.sender
+  .outer style='margin-bottom: 10px; padding-bottom: 10px;'
+    div class="#{is_unread == true ? 'unread' : 'reading'}" onclick="#"
+      .col_1
+        span.sender_avatar
+          - if sender != current_user
+            =link_to "/users/#{sender.username}" do
+              img alt="" src="#{sender.avatar.image_url(:avatar)}"
+          - else
+              img alt="" src="#{sender.avatar.image_url(:avatar)}"
+        h5 = sender.username 
+        strong 
+          = sender.age
+          ', 
+          = sender.gender
+          ',
+          = sender.sexuality
+        small
+          br
+          = sender.location.city
+          ',
+          = sender.location.state
+      .col_2
+        p = simple_format h message.body
+      .col_3
+        strong = extract_date(message.created_at)
+        small = extract_time(message.created_at)

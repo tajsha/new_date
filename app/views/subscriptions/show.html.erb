@@ -1,0 +1,17 @@
+<div id="subscription">
+  <h1>Your Subscription</h1>
+  <p>You have signed up for the <strong><%= @subscription.plan.name %></strong> plan which includes <strong><%= @subscription.plan.length %>  length</strong> for just <strong><%= number_to_currency @subscription.plan.price %></strong> per month!</p>
+</div>
+
+<%= link_to "Cancel my subscription", subscriptions_cancelsubscription_path, :data => { :confirm => "Are you sure?" } %><p>
+
+
+<%= link_to "Update my subscription", subscriptions_updatesubscription_path, :data => { :confirm => "Are you sure?" } %>
+
+
+<%= link_to "Suspend paypal", subscriptions_suspend_path, :data => { :confirm => "Are you sure?" } %>
+
+<%= link_to "Reactivate paypal", subscriptions_reactivate_path, :data => { :confirm => "Are you sure?" } %>
+
+<p>
+	

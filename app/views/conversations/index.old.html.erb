@@ -1,0 +1,8 @@
+<h1>Inbox</h1>
+
+<%= render collection: mailbox.inbox, partial: 'conversations/conversation', as: :conversation %>
+
+<h2>Sentbox</h2>
+  <ul><%= render mailbox.sentbox %></ul>
+<h2>Trash</h2>
+  <ul><%= render mailbox.trash %></ul>

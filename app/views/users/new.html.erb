@@ -1,0 +1,79 @@
+<div class="sm_form_container">
+  <h1>Create your account</h1>
+  <%= form_for @user, :validate => true do |f|  %>
+    <% if @user.errors.any? %>
+      <div class="error_messages">
+        <h2>Form is invalid</h2>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="field">
+        <%= f.label :email %><br/>
+        <%= f.text_field :email %>
+      </div>
+              
+      <div class="field">
+        <%= f.label :username %><br/>
+        <%= f.text_field :username %>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="field">
+        <%= f.label :password %><br/>
+        <%= f.password_field :password %>
+      </div>
+  
+      <div class="field">
+        <%= f.label :zip_code %><br/>
+        <%= f.text_field :zip_code %>
+      </div>
+    </div>
+    
+    <div class="row">
+     <div class="field">
+        <%= f.label "I'm a" %><br />
+         <div class="check-gender">
+          <div class="check check-male" style="margin: 0">
+            <input id="user_gender_male" name="user[gender]" type="radio" value="Male">
+            <label for="user_gender_male">Male</label>
+          </div>
+          <div class="check check-female" style="margin: 0">
+            <input id="user_gender_female" name="user[gender]" type="radio" value="Female">
+            <label for="user_gender_female">Female</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="field">
+        <%= f.label "Interested in" %><br />
+        <div class="check-gender">
+          <div class="check check-male" style="margin: 0">
+            <input id="user_sexuality_male" name="user[male_sexuality]" type="checkbox" value="Male" class="jqTransformHidden">
+            <label for="user_sexuality_male">Male</label>
+          </div>
+          <div class="check check-female" style="margin: 0">
+            <input id="user_sexuality_female" name="user[female_sexuality]" type="checkbox" value="Female" class="jqTransformHidden">
+            <label for="user_sexuality_female">Female</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="field" id=""> 
+        <%= f.label :birthday %><br />
+        <%= f.date_select :birthday, :start_year => 1995, :end_year => 1932, use_short_month: true  %>
+      </div>
+      
+      <div class="field">
+        <%= f.submit "sign up", class: 'btn' %>
+      </div>
+    </div>
+  <% end %>
+</div>

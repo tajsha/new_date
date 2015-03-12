@@ -1,0 +1,30 @@
+<h1>Advanced Search</h1>
+
+<%= form_for @search do |f| %>
+<div class="field">
+  <%= f.label :gender %><br />
+  <%= f.select :gender, ['male', 'female'], :include_blank => true %>
+</div>
+
+  <div class="field">
+    <%= f.label :zip_code %><br />
+    <%= f.text_field :zip_code %>
+  </div>
+  <div class="field">
+    <%= f.label :children %><br />
+    <%= f.select :children, [['Yes, they live with me'], ['I want kids now'], ["I want one someday"], ["Not for me"]], :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :religion %><br />
+    <%= f.select :religion, [["Agnostic"], ["Atheist"], ["Christian"], ["Catholic"], ["Buddhist"], ["Hindu"], ["Jewish"], ["Muslim"], ["Spiritual without affiliation"], ["Other"], ["None"], ["Prefer not to say"]], :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :ethnicity %><br />
+    <%= f.select :ethnicity, [["Asian"], ["Biracial"], ["Indian"], ["Hispanic/Latin"], ["Middle Eastern"], ["Native American"], ["Pacific Islander"], ["White"], ["Other"]], :include_blank => true %>
+  </div>	<%= f.select :min_age, (18..75), :include_blank => true %>
+	to
+	<%= f.select :max_age, (18..75), :include_blank => true %>
+
+
+  <div class="actions"><%= f.submit "Search" %></div>
+<% end %>

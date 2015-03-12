@@ -1,0 +1,149 @@
+<div class="col-12">
+	<div class="sm_form_container">
+		<h1>Account Information</h1>
+	  <%= form_for @user do |f| %>
+    <% if @user.errors.any? %>
+      <div class="error_messages">
+        <h2>Form is invalid</h2>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="field">
+        <%= f.label :email %><br/>
+        <%= f.text_field :email %>
+      </div>
+              
+      <div class="field">
+        <%= f.label :username %><br/>
+        <%= f.text_field :username %>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="field">
+        <%= f.label :password %><br/>
+        <%= f.password_field :password %>
+      </div>
+  		
+  		<div class="field">
+        <%= f.label :password_confirmation %><br/>
+        <%= f.password_field :password_confirmation %>
+      </div>
+      
+    </div>
+    
+    <div class="row">
+      <div class="field" id=""> 
+        <%= f.label :birthday %><br />
+        <%= f.date_select :birthday, :start_year => 1995, :end_year => 1932, use_short_month: true  %>
+      </div>
+      <div class="field">
+        <%= f.label :zip_code %><br/>
+        <%= f.text_field :zip_code %>
+      </div>
+    </div>
+    
+    <div class="row">
+    	<div class="field select">
+    		<%= f.label :time_zone %><br/>
+        <%= f.select :time_zone, :collection => [["Eastern Time (US & Canada)", "Eastern Time (US & Canada)"], ["Central Time (US & Canada)", "Central Time (US & Canada)"], ["Mountain Time (US & Canada)", "Mountain Time (US & Canada)"], ["Pacific Time (US & Canada)", "Pacific Time (US & Canada)"]] %>
+    	</div>
+    	<div class="field" style="padding-top: 20px">
+    	  <br/>
+				<%= f.check_box :no_email, :value => @user.no_email %><label for="user_no_email"><span><span>subscribe to newsletter</span></span></label> 
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="field"><%= f.submit "Subscribe", class: 'btn', style: "width: 40%; margin-left: 165px"  %></div>
+    </div>
+  <% end %>
+</div>
+
+</div>
+<div class="col-12">
+	<div class="sm_form_container">
+
+		<div id="subscription">
+		  <h1>Your Subscription</h1>
+		  <p>You are signed up for the <strong><%= @user.subscription.plan.name %></strong> plan which includes <strong><%= @user.subscription.plan.length %>  months</strong> for just <strong><%= number_to_currency @user.subscription.plan.price %></strong> per month! You have <%=distance_of_time_in_words(Time.now, @user.subscription.expires_at) %> until it expires!</p>
+		</div>
+		
+		
+		<% if @user.subscription.plan_id == 1 %>
+		  <p><%= link_to "Upgrade to 12 months", subscriptions_updatesubscription_path, :data => { :confirm => "Are you sure?" } %></p>
+
+		<% end %>
+	<p>
+		<% if @user.subscription.paypal_recurring_profile_token.nil? %>
+		
+		<p>Add new Credit Card</p>
+		<%= form_for @user do |f| %>
+		  <% if @user.errors.any? %>
+		    <div class="error_messages">
+		      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+		      <ul>
+		      <% @user.errors.full_messages.each do |msg| %>
+		        <li><%= msg %></li>
+		      <% end %>
+		      </ul>
+		    </div>
+		  <% end %>
+	
+		<div class="row">
+		  <div class="field">
+		    
+		    <%= label_tag :pay_with_card do %>
+		      <%= image_tag "visa.png" %>
+		      <%= image_tag "mastercard.png" %>
+		      <%= image_tag "discover.png" %>
+		      <%= image_tag "american_express.png" %>
+		      <%= image_tag "jcb.png" %>
+		     <% end %>
+		  </div>
+		</div>
+		
+		
+		  <div id="billing_fields">
+		    <div class="field">
+			  <%= f.hidden_field :user_id, :value => current_user.id %> 
+		      <%= f.hidden_field :email %>
+		    </div>
+      <div class="row">
+          <div class="field">
+            <%= label_tag :card_owner, "Name (as it appears on the card)" %>
+            <%= text_field_tag :card_owner, nil, name: nil %>
+          </div>
+          <div class="field">
+            <%= label_tag :card_number, "Credit Card Number" %>
+            <%= text_field_tag :card_number, nil, name: nil %>
+          </div>
+      </div>
+      <div class="row">
+          <div class="field">
+            <%= label_tag :card_code, "Security Code on Card (CVV)" %>
+            <%= text_field_tag :card_code, nil, name: nil %>
+          </div>
+          <div class="field" id="expiration">
+            <%= label_tag :card_month, "Card Expiration" %><br />
+            <%= select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"} %>
+            <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "card_year"} %>
+          </div>
+        
+        <div id="stripe_error">
+          <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field"><%= f.submit "Subscribe", class: 'btn', style: "width: 40%; margin-left: 165px"  %></div>
+      </div>
+		  </div>
+		<% end %>
+	<% end %>
+	</div>
+</div>

@@ -1,0 +1,59 @@
+User Statistics
+<p>
+<%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Messages", admin_messages_path %> | <%= link_to "Lets Go's Dates", admin_letsgo_path %> | <%= link_to "Question & Answers", admin_qanda_path %> | <%= link_to "Pictures", admin_pictures_path %>   
+<p>
+	
+	<div class="row">
+	  <div class="col-xs-6">
+	    <b>Users By Day<b>
+	    <%= line_chart User.group_by_day(:created_at).count %>
+		<b>Users By Month<b>
+	    <%= line_chart User.group_by_month(:created_at).count %>
+		<b>Ethnicity<b>
+		<%= pie_chart User.group(:ethnicity).count %>
+
+	  </div>
+
+	</div>
+	<p>
+	<p>
+	<%= User.count %> total users
+	<P>
+	<%= User.total_males %> Male registered users
+	<P>
+	<%= User.total_females %> Female registered users
+	<P>
+	<%= User.group(:ethnicity).count %>
+	<p>
+		<table class="pretty">
+		  <tr>
+		    <th>ID</th>
+		    <th>User</th>
+		    <th>Gender</th>
+		    <th>Delete?</th>
+		    <th>Subscriber</th>
+		    <th>Date</th>
+		
+		
+		  </tr>
+		  <%  @users.sort_by(&:created_at).reverse.each do |user| %>
+		    <tr>
+		      <td><%= user.id %></td>
+		      <td><%= link_to user.username, user %></td>
+		      <td><%= user.gender %></td>
+		      <td><%= link_to "delete", user, method: :delete,
+				                                          data: { confirm: "You sure?"} %></td>
+		      <td>	<% if user.subscription %> Yes <% end %>
+				<% if user.subscription.nil? %> No <% end %></td>
+		
+		<td><%= user.created_at.strftime("%B %e, %Y") %></td>
+		    </tr>
+		  <% end %>
+		</table>
+				<%= will_paginate(@users) %>
+				
+				<ul>
+				  <% @age_groups.each do |age_group| %>
+				    <li><%= age_group.from %> - <%= age_group.to %>: <b><%= age_group.count %></b></li>
+				  <% end %>
+				</ul>

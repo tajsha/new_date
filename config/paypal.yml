@@ -1,0 +1,14 @@
+development: &sandbox # change to your own
+  username: pwz2k-facilitator_api1.hotmail.com
+  password: 1384963232
+  signature: An5ns1Kso7MWUdW4ErQKJJJ4qi4-Asss8sIUzSk7XExg2DcSoBaM5nXe
+  sandbox: true
+
+test:
+  <<: *sandbox
+
+production: &production
+  username: SET_YOUR_OWN
+  password: SET_YOUR_OWN
+  signature: SET_YOUR_OWN
+  sandbox: false

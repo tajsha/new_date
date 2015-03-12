@@ -1,0 +1,33 @@
+Pictures Statistics
+<p>
+<%= link_to "Users", admin_users_path %> | <%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Messages", admin_messages_path %> | <%= link_to "Lets Go's Dates", admin_letsgo_path %> | <%= link_to "Question & Answers", admin_qanda_path %>
+<p>
+	
+	<div class="row">
+	  <div class="col-xs-6">
+	    <b>Photos Per Day<b>
+	    <%= line_chart Photo.group_by_day(:created_at).count %>
+		<b>Photos Per Month<b>
+	    <%= line_chart Photo.group_by_month(:created_at).count %>
+	  </div>
+
+	</div>
+	<p>
+	<P>
+	<%= Photo.count %> total Photos
+	<P>
+		<p>
+		<%= Photo.total_male %> Male photos
+		<P>
+		<%= Photo.total_female %> Female photos
+		<p>
+	<% @photos.sort_by(&:created_at).reverse.each do |photo| %>
+	<%= link_to photo.user.username, photo.user %>
+	<p>
+	   <%=image_tag photo.image_url(:thumb) %>
+	<P>
+		<%= photo.created_at.strftime("%B %e, %Y") %>
+		
+		<P>
+	<%= button_to "remove", photo, :confirm => 'Are you sure?', :method => :delete %>
+	<% end %>

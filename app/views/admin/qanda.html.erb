@@ -1,0 +1,30 @@
+Question & Answers Statistics
+<p>
+<%= link_to "Users", admin_users_path %> | <%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Messages", admin_messages_path %> | <%= link_to "Lets Go's Dates", admin_letsgo_path %> | <%= link_to "Pictures", admin_pictures_path %>  
+<p>
+	
+		<div class="row">
+		  <div class="col-xs-6">
+		    <b>Questions By Day<b>
+		    <%= line_chart Question.group_by_day(:created_at).count %>
+			<b>Questions By Month<b>
+		    <%= line_chart Question.group_by_month(:created_at).count %>
+		  </div>
+
+		</div>
+		<P>
+		<%= Question.count %> total questions
+		<P>
+		<%= Question.total_answer %> total answers
+		<P>
+		<%= Question.total_answer_cancelled %> Unanswered Questions
+		<P>
+		<%= Question.total_male %> Questions from guys
+			<P>
+		<%= Question.total_female %> Questions from females
+			<P>
+		
+		  <% @questions.each do |question| %>
+		    <li><%= question.question %>  </li><%= button_to "remove", question, :confirm => 'Are you sure?', :method => :delete %>
+		<%= question.answer %>
+		  <% end %>

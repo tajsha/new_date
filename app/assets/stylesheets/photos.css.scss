@@ -1,0 +1,97 @@
+// Place all the styles related to the photos controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* resize so easier to view */
+img.profImg {
+    width: 480px;
+    /* z-index: 1; */
+}
+/* all hover items */
+.overImg {
+  background: #111111;
+  color: white;
+  opacity: 0.6;
+  border-radius: 0.5em;
+  width: 190px;
+  height: 190px;
+  /* z-index: 2; */
+}
+/* hover effects */
+.thumbImg:hover .overImg  { display:block; }
+.thumbImg .overImg { display:none; }
+/* specific to thumb image, will need to be adjusted */
+.thumb-over-2 {
+  position: absolute;
+  top: 310px;
+  left: 25px;
+}
+.thumb-over {
+  position: absolute;
+  top: 36px;
+  left: 25px;
+}
+/* text near bottom of image */
+.overText {
+    color: white;
+    font-size: 1.1em;
+    position: relative;
+    top: 85%;
+    left: 12.5%;
+    z-index: 3;
+}
+/* X button to close: should use an icon for this */
+.closer {
+    background-color: white;
+    color: black;
+    font-size: 0.8em;
+    border-radius: 5em;
+    padding: 0.2em;
+    width: 2em;
+    height: 1em;
+    position: relative;
+    left: 85%;
+    top: -8px;
+}
+
+#new_photo {
+  clear: both;
+}
+
+.photo {
+  border: solid 1px #CCC;
+  padding: 10px;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+
+  .name {
+    padding-top: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .actions {
+    font-size: 10px;
+    text-align: center;
+    color: #777;
+  }
+}
+
+.upload {
+  border-top: solid 1px #CCC;
+  width: 400px;
+  padding-top: 10px;
+  margin-top: 10px;
+
+  .progress {
+    margin-top: 8px;
+    border: solid 1px #555;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    .bar {
+      height: 10px;
+      background: #3EC144;
+    }
+  }
+}

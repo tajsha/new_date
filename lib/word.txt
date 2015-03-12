@@ -1,0 +1,6 @@
+girl > Female
+women > Female
+boy > male
+man > male
+dollar > male
+spot > male

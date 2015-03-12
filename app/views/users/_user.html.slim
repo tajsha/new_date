@@ -1,0 +1,22 @@
+- if user.avatar.present?
+  .common_box.box1 data-user-id="#{user.username}"
+    .img_box
+      = link_to user do
+        = image_tag user.avatar.try(:image_url), size: "194x194"
+      -if @user.present?  
+        ul.btn_link.hide
+          li
+            a.message_btn  href="#" data-user="#{user.id}"  data-mfp-src='#message_me'   Message
+          li
+            = link_to "Save", follow_popup_user_path(user), class: 'save_btn', :'data-mfp-src'=>'#follow_div', remote: true
+          li
+            a.report_btn href="#" data-mfp-src='#report_me'  Report
+    .img_detail
+      small years
+      .circle
+        span.age_box class="#{user.gender == 'Male' ? '': 'pink'}" = user.age
+      h3 class="#{user.gender == 'Male' ? '' : 'pink'}" = user.username
+      h4 
+        = user.address
+      div class= "#{user.gender == 'Male' ? 'green_corner': 'pink_corner'}"
+        =image_tag "#{user.gender == 'Male' ? 'side_curv.png': 'curv_2.png'}"

@@ -1,0 +1,35 @@
+<% provide(:title, 'FIND A MATE') %>
+<h1>Search and find a mate</h1>
+
+<%= form_tag searches_path, method: :get do %>
+<p>
+        <%= text_field_tag :search, params[:search] %>
+        <%= button_tag "Search", name: nil %>
+        </p>
+<% end %>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  jQuery(".content").hide();
+  //toggle the componenet with class msg_body
+  jQuery(".heading").click(function()
+  {
+    jQuery(this).next(".content").slideToggle(500);
+  });
+});
+</script>
+<div class="layer1">
+<p class="heading">or use our Advanced Search </p>
+<div class="content"><%= render partial: 'searches/new', locals: {search: @search} %>
+
+</div>
+</div>
+
+<p>
+	
+<% @users.each do |user| %>
+	<li>
+	   <%= link_to user.username, user %>
+		</li>
+		<% end %>
+	

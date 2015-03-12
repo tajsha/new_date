@@ -1,0 +1,121 @@
+.wrapper
+  #top_sec
+    .msg_row
+      h2 Messages
+      strong
+        span 
+          'Hi,
+          = current_user.username 
+          '
+          'you have
+          = current_user.mailbox.inbox(:unread => true).count 
+          Unread  unread Messages
+    .mail_box
+      .tab_row#tabs
+        ul
+          li.active
+            a id='inbox_link' href="#inbox"  inbox
+          li
+            a id='sentbox_link' href="#sentbox"  sent
+        ul.right
+          li
+            a href="#" id='send_trash'
+              img alt="" src="/assets/del_icon.png" /
+          li
+            input type="checkbox" class='select_conversations'
+      .tab_contr#inbox
+        = render collection: @inbox, partial: 'conversations/conversation', as: :conversation
+        .hide#inbox_pagination
+          = will_paginate @inbox
+      .tab_contr#sentbox.hide
+        = render collection: @sentbox, partial: 'conversations/conversation', as: :conversation
+        .hide#sentbox_pagination
+          = will_paginate @sentbox
+javascript:
+  $(window).load(function(){
+    $("#send_trash").click(function(){
+        var ids = [];
+        $('input.conversation_checkbox:checked').each(function(){
+            ids.push($(this).data('id'));
+        });
+        
+        $.ajax({ type: "POST",  url:"/conversations/trash_all",  data:{ids: ids},
+		  success:function(data){
+            jQuery.each(ids, function (i, val) {
+              $("div.outer#msg_"+val).remove();
+            });
+          }
+        });
+    });
+        
+    
+    $('#inbox .pagination a').each(function(){
+      var href = $(this).attr('href')
+      if (href != 'undefined' && href != null) {
+        var link = href.split('?')
+        href = link[0]+'.js?'+link[1]
+        $(this).attr('href',href+'&inbox=true')
+      }
+    })
+    $('#sentbox .pagination a').each(function(){
+      var href = $(this).attr('href')
+      if (href != 'undefined' && href != null) {
+        var link = href.split('?')
+        href = link[0]+'.js?'+link[1]
+        $(this).attr('href',href+'&sentbox=true')
+      }
+    })
+    if ($('#inbox .pagination a').length > 0) {
+      $('#inbox').infinitescroll({
+        loading: {
+          msg: null,
+          msgText: "<em>Loading the next set of messages...</em>",
+          speed: 'fast',
+        },
+        finishedMsg: '<em> No More Messages </em>',
+        navSelector: 'div#inbox_pagination',
+        nextSelector: 'div#inbox_pagination a.next_page',
+        itemSelector: 'div#inbox div.outer',
+        debug: true,
+        appendCallback: true,
+        dataType: 'html',
+        errorCallback: function(data){console.log('data', data);},
+        prefill: false
+      },
+      function(){
+        $('input[type=checkbox]').jqTransCheckBox();
+       }
+       );
+    }
+    if ($('#sentbox .pagination a').length > 0) {
+      $('#sentbox').infinitescroll({
+        loading: {
+          msg: null,
+          msgText: "<em>Loading the next set of messages...</em>",
+          speed: 'fast',
+        },
+        finishedMsg: '<em> No More Messages </em>',
+        navSelector: 'div#sentbox_pagination',
+        nextSelector: 'div#sentbox_pagination a.next_page',
+        itemSelector: 'div#sentbox div.outer',
+        debug: true,
+        appendCallback: true,
+        dataType: 'html',
+        errorCallback: function(data){console.log('data', data);},
+        prefill: false
+      },
+       function(){
+        $('input[type=checkbox]').jqTransCheckBox();
+       }
+      );
+    }
+    
+    $(".outer").hover(
+	  function() {
+		$( this ).find("div.message_delete").show();
+	  }, function() {
+		$( this ).find("div.message_delete").hide();
+	  }
+	);
+  })
+  

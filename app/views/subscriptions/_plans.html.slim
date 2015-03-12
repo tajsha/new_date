@@ -1,0 +1,32 @@
+- sender = conversation.last_sender
+- message = conversation.last_message
+- receipts = conversation.receipts.recipient(@user).is_unread
+- is_unread = receipts.count > 0 ? true : false
+.outer
+  div.converation class="#{is_unread == true ? 'unread' : 'read'}" onclick="#" data-href="#{conversation_path(conversation)}"
+    .col_1
+      img alt="" src="#{is_unread == true ? '/assets/un_read.png' : '/assets/read.png'}" /
+      span.conversation_avatar
+        =link_to "/profile/#{sender.id}" do
+          img alt="" src="#{sender.avatar.image_url(:avatar)}" /
+      h5 = sender.username
+      strong 
+        = sender.age
+        ', 
+        = sender.gender
+        ',
+        = sender.sexuality
+      small
+        br
+        = sender.location.city
+        ',
+        = sender.location.state
+    .col_2
+      span = message.subject
+      p = message.body
+    .col_3
+      strong = extract_date(message.created_at)
+      small = extract_time(message.created_at)
+  form action="#" 
+    fieldset
+      input type="checkbox" class="conversation_checkbox"

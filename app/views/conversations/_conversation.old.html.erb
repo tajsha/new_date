@@ -1,0 +1,18 @@
+<%= content_tag_for(:li, conversation) do |conversation| %>
+    <%= link_to conversation.subject, conversation%> - <%= conversation.updated_at.strftime("%B %-d, %Y %l:%M%P") %>
+    | From: <% conversation.participants.each do |participant| %>
+	 <% if participant != current_user %>
+	  <%= link_to participant.username, participant %>	
+	 <% end %>
+	<% end %>
+	<%= content_tag_for(:li, conversation.receipts_for(current_user)) do |receipt| %>
+	 <% message = receipt.message %>
+	<%= image_tag message.sender.avatar.image_url(:avatar) %>
+<% end %>	
+	    <% if conversation.is_completely_trashed?(current_user)%>
+      <%= link_to 'Untrash', [:untrash, conversation], method: :post%>
+    <%else%>
+      <%= link_to 'Move to trash', [:trash, conversation], method: :post%>
+
+<% end %>
+<% end %>

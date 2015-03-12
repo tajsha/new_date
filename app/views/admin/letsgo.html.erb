@@ -1,0 +1,34 @@
+Lets Go Statistics
+<p>
+<%= link_to "Users", admin_users_path %> | <%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Messages", admin_messages_path %> | <%= link_to "Question & Answers", admin_qanda_path %> | <%= link_to "Pictures", admin_pictures_path %>  
+<p>
+	
+		<div class="row">
+		  <div class="col-xs-6">
+		    <b>Dates Per Day<b>
+		    <%= line_chart Letsgo.group_by_day(:created_at).count %>
+			<b>Dates Per Month<b>
+		    <%= line_chart Letsgo.group_by_month(:created_at).count %>
+		  </div>
+
+		</div>
+		<P>
+		<P>
+		<%= Letsgo.count %> total Dates
+		<p>
+		<%= Letsgo.total_male %> Dates by Males
+		<P>
+		<%= Letsgo.total_female %> Dates by Females 
+								<P>
+			TAG: <%= link_to "Eat/Drink", letsgos_eatdrink_path %> | <%= link_to "Listen/Watch", letsgos_listenwatch_path %> | <%= link_to "Play", letsgos_play_path %> | <%= link_to "Explore", letsgos_explore_path %> | <%= link_to "Other", letsgos_other_path %>   
+
+			<% for letsgo in @letsgos %>
+
+			  <li>
+			    <b>Let's Go...<span class="content"><%= letsgo.content %></span></b> posted by: <%= link_to letsgo.user.username, letsgo.user %>
+			       <%= link_to 'Delete', { :controller => 'letsgos', :action => 'destroy', :id => letsgo.id }, 
+				                      { :confirm => 'Are you sure?', :method => :delete} %>
+			     
+			  <% end %>
+
+			</li>			

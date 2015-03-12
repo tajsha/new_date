@@ -1,0 +1,12 @@
+<div class="quesiton-container">
+  <h1><%= @question.question %></h1>
+  From:	<%= @question.sender_id %> -
+</div>
+
+<h3>Add your response...</h3>
+
+<%= render :partial => "answers/form", :locals => { :question => @question} %>
+
+
+
+<%= link_to "Back", questions_path, :class => "button" %>

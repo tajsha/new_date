@@ -1,0 +1,5 @@
+<% if current_user.following?(@user) %>
+  $('#follow_div #follow_user').html("<%= j(render 'unfollow') %>")
+<% else %>
+  $('#follow_div #follow_user').html("<%= j(render 'follow') %>")
+<% end %>  

@@ -1,0 +1,17 @@
+<% for letsgo in @letsgos %>
+ 
+  <li>
+    <%= letsgo_icon(letsgo) %>
+    <b>Let's Go...<span class="content"><%= letsgo.content %></span></b>
+      <% if current_user?(letsgo.user) %>
+        <%= link_to "delete", letsgo, method: :delete, data: { confirm: "You sure?" }%> 
+      <% end %> 
+      <% unless current_user?(letsgo.user) %> 
+<P>
+        <%= link_to "I'm Interested", interested_letsgo_path(letsgo), method: :message %> | 
+        <%= link_to "repost", repost_letsgo_path(letsgo), method: :post %>
+      <% end %>
+ 
+  <% end %>
+ 
+</li>

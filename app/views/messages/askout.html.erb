@@ -1,0 +1,8 @@
+<%= @user %>
+<%= form_tag({controller: "messages", action: "create"}, method: :post) do %>
+ <%= hidden_field_tag :subject, "You have a date from #{@current_user} " %>
+ <%= label :body, "Message text" %>
+ <%= text_area_tag :body %>
+ <%= hidden_field_tag(:user, params[:user_id]) %>
+ <%= submit_tag 'Send message', class: "btn btn-primary" %>
+<% end %>

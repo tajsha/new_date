@@ -1,0 +1,10 @@
+<p class="flash"><%= flash[:notice] %></p>
+
+<%= form_for(:question, :url => question_answers_path(question)) do |f| %>
+	<div class='form_container' style='width: 100%;border: 0 none;'>
+		<ul style='list-style: none;'>
+			<li><%= f.text_area :answer, {:placeholder => 'Write your answer here...' , :style=>'width:97%;height:50px;resize: none; border: 1px solid #AAA; padding: 10px; margin-bottom: 10px;'} %></li>
+			<li><%= hidden_field_tag :recipient_id, {:placeholder => 'Please add your name...' , :style=>'width:97%;border: 1px solid #AAA; padding: 10px; margin-bottom: 10px;'}  %></li>
+			<li><%= f.submit "Respond", :class => 'find_btn', :style=>'margin:0' %></li>
+			</ul>
+			<% end %>

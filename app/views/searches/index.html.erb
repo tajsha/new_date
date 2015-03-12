@@ -1,0 +1,13 @@
+<h1>Search Results</h1>
+
+
+<% @users.each do |user| %>
+    <tr>
+	  <td><%= image_tag user.avatar.image_url(:avatar) %></td>
+      <td><%= user %></td>
+      <td><%= user.location.zip_code %></td>
+      <td><%= user.location.city %>, <td><%= user.location.state %></td></td><p>
+    </tr>
+
+<% end %>
+

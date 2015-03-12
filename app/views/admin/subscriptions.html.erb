@@ -1,0 +1,73 @@
+Subscription Statistics
+<p>
+<%= link_to "Users", admin_users_path %> | <%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Messages", admin_messages_path %> | <%= link_to "Lets Go's Dates", admin_letsgo_path %> | <%= link_to "Question & Answers", admin_qanda_path %> | <%= link_to "Pictures", admin_pictures_path %>  
+<p>
+	
+	<div class="row">
+	  <div class="col-xs-6">
+	    <b>Subscriptions By Day<b>
+	    <%= line_chart Subscription.group_by_day(:created_at).count %>
+		<b>Subscriptions By Month<b>
+	    <%= line_chart Subscription.group_by_month(:created_at).count %>
+	  </div>
+
+	</div>
+	<p>
+	<%= Subscription.total_active %> active subscribers
+	<P>
+	<%= Subscription.count %> total subscribers
+	<P>
+	<%= Subscription.total_cancelled %> Cancelled subscribers
+	<P>
+	<%= Subscription.total_paypal_recurring_profile_token %> PayPal subscribers
+	<P>
+			<%= Subscription.total_active_paypal %> Active PayPal subscribers
+			<P>
+		
+	<%= Subscription.total_stripe_customer_token %> Stripe subscribers
+	<P>
+		<%= Subscription.total_active_stripe %> Active Stripe subscribers
+		<P>
+
+	<%= Subscription.total_stripe_cancelled %> Stripe cancelled subscribers
+	<P>
+	<%= Subscription.total_paypal_cancelled %> Paypal cancelled subscribers
+	<P>
+	<%= Subscription.total_annual %> Annual Subscribers
+	<P>
+	<%= Subscription.total_monthly %> Monthly Subscribers
+	<P>
+	<%= Subscription.total_male %> Male Subscribers
+	<P>
+	<%= Subscription.total_female %> Female Subscribers
+	
+
+
+		<table class="pretty">
+		  <tr>
+		    <th>ID</th>
+		    <th>User</th>
+		    <th>Length</th>
+		    <th>Date</th>
+		    <th>Type</th>
+		    <th>Cancelled</th>
+		
+		
+		  </tr>
+		  <% @users.sort_by {|user| user.subscription.created_at}.reverse.each do |user| %>
+		    <tr>
+		      <td><%= user.subscription.id %></td>
+		      <td><%= link_to user.username, user %></td>
+		      <td><%= user.subscription.plan.name %></td>
+		      <td><%= user.subscription.created_at.strftime("%B %e, %Y") %></td>
+		      <td><% if user.subscription.stripe_customer_token.nil? %> PAYPAL <% end %>
+		<% if user.subscription.paypal_recurring_profile_token.nil? %> STRIPE  
+			<% end %></td>
+			<td><% if user.subscription.cancelled.nil? %> No <% end %>
+				<% if user.subscription.cancelled %> Yes  
+					<% end %></td>
+		
+		    </tr>
+		  <% end %>
+		</table>
+		<%= will_paginate(@users) %>

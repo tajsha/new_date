@@ -1,0 +1,123 @@
+<link href="/styles/middle.css" media="screen" rel="stylesheet" type="text/css">
+
+
+<div class="speed_dates">
+   <section class="speed_dates_content" id="page">
+      <section class="height-breakpoint" id="speed-date-slides">
+         <ol style="margin-left: 675.5px; left: -437.5px;">
+         <% @users.each do |u| %>
+            <li class="date-slide">
+               <div class="user-content imp">
+                  <div class="user-photo height-breakpoint">
+                     <a href="<%= user_url(u) %>" target="_blank">
+						<img alt="<%= u.username %>&#39;s photo" src="<%= u.avatar.try(:image_url,:profile) %>">
+                     </a>
+                  </div>
+                  <div class="user-date">
+                     <div class="user-date-container">
+                        <div class="date-idea">
+                           <div class="user-proposition">
+                              <p class="date-content">
+                                 <%= u.letsgos.first.content %>
+                              </p>
+                              <p class="date-location">
+                                 <%= u.letsgos.first.tag %>
+                              </p>
+                              <dl class="media-meta media-meta-inline">
+                                 <dt class="user-login">
+                                    <a href="<%= user_url(u) %>" target="_blank"><span class="user-name">
+                                    <%= u.username %>
+                                    </span>
+                                    </a>
+                                 </dt>
+                                 <dd class="user-meta">
+                                    <%= u.age %>, <%= u.gender.first %>, <%= u.sexuality %>
+                                 </dd>
+                                 <dd class="user-location"><%= u.location.city %>, <%= u.location.state %></dd>
+                              </dl>
+                           </div>
+                        </div>
+                        <fieldset class="date-actions date-actions">
+                           <label>Intrigued?</label>
+                           <div class="actions">
+                              <form accept-charset="UTF-8" action="#" class="skip-form" method="post">
+                                 <input class="button button-beige" id="action_no" name="commit" type="submit" value="No">
+                              </form>
+                              <form accept-charset="UTF-8" action="<%= interested_letsgo_path(u.letsgos.first) %>" class="intrigue-form" method="post">
+                                 <input class="button" id="action_yes" name="commit" type="submit" value="Yes!">
+                              </form>
+                           </div>
+                        </fieldset>
+                     </div>
+                  </div>
+               </div>
+            </li>
+          <% end %>
+         </ol>
+         <div class="empty-state">
+            <div class="layout-container">
+               <div class="empty-container">
+                  <div class="empty-inner">
+                     <header>
+                        <h1>
+                           That's all for Now
+                        </h1>
+                     </header>
+                     <p>
+                        We're looking for more people we think you'll like. In the meantime, go
+                        out there and get noticed! Posting a new date idea will put you at the
+                        very top of search results - where you belong.
+                     </p>
+                     <p class="action">
+                        <a class="button large" href="<%= user_url(current_user) %>">
+                        Post a Date
+                        </a>
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+   </section>
+</div>
+
+
+<script>
+	jQuery(document).ready(function () {
+		$("#speed-date-slides ol li:first").addClass('active');
+		$(".skip-form").submit(function(e){
+			e.preventDefault(); //STOP default action
+			var p = $("#speed-date-slides ol").position().left - 543
+            $("#speed-date-slides ol").css({left: p});
+            $(this).closest('li').removeClass('active');
+            $(this).closest('li').next().addClass('active');
+            if($(this).closest('li').is(':last-child')){
+				$(this).closest('ol').hide();
+				$(".empty-state").show();
+				
+			}
+		});
+		
+		$(".intrigue-form").submit(function(e){
+			e.preventDefault(); //STOP default action
+			var form = this;
+			$.ajax({
+				type: "POST",
+				url: $(this).attr("action"),
+				success: function(data) {
+					var p = $("#speed-date-slides ol").position().left - 543
+					$("#speed-date-slides ol").css({left: p});
+					$(form).closest('li').removeClass('active');
+					console.log($(form).closest('li').next());
+					$(form).closest('li').next().addClass('active');
+					if($(form).closest('li').is(':last-child')){
+					    $(form).closest('ol').hide();
+						$(".empty-state").show();
+						
+					}
+				}
+			});
+		});
+	});
+	
+</script>

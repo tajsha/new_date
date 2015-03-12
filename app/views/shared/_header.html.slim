@@ -1,0 +1,63 @@
+- logged_in_user = current_user
+- if logged_in_user
+  #header
+    .wrapper
+      .login_sec
+        .col
+          a href="" 
+            =image_tag "login_icon1.png"
+            span 
+              'Welcome, 
+              = logged_in_user.username
+            =image_tag "profile_link_img.png", class: 'img'
+        .col.col2
+          a href="/conversations"
+            =image_tag "login_icon2.png"
+            span Messages
+            / =image_tag "login_icon4.png", class: 'img4'
+            span class="messbg_icon" =unread_messages(current_user)
+        .col.col3
+          a href="/logout" 
+            =image_tag "login_icon3.png", class: 'img3'
+            span Logout
+#menu_sec
+  .wrapper
+    .logo
+      a href="#{root_path}" 
+        =image_tag "logo.png"
+    - if logged_in_user.blank?
+      a href="/signup" class="registered_btn" Not Yet Registered 
+    ul#nav
+      li.active
+        a href="#{root_path}" 
+          =image_tag "home_icon.png"
+          span Home
+      li
+        a href="/searches/new" Search
+      li
+        a href="#" About Us
+      li class="#{logged_in_user.present? ? 'last' : ''}"
+        a.profile_btn.last.report_btn data-mfp-src='#contact_me' href="#" Contact Us
+      -if logged_in_user.blank?
+        li class="last"
+          a#signin_link href="#"
+            |Sign In
+          #signin-dropdown
+            = form_tag sessions_path, :class => 'signin' do
+              fieldset.textbox
+                label.username
+                  span Username or email
+                  = text_field_tag :email, params[:email]
+                  br
+                label.password
+                  span Password
+                  = password_field_tag :password
+              fieldset.remb
+                label.remember
+                  = check_box_tag :remember_me, 1, params[:remember_me]
+                  span Remember me
+                br
+              .actions = submit_tag "Log In", class: 'btn btn-primary'
+              p
+                = link_to "forgot your password?", new_password_reset_path
+            br

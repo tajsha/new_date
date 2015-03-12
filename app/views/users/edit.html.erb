@@ -1,0 +1,60 @@
+<h1>Account Information</h1>
+
+		<p>Email: <%= best_in_place @user, :email %></p>
+		<p>Password: <%= best_in_place @user, :password %></p>
+		<p>Password Confirmation: <%= best_in_place @user, :password_confirmation %></p>
+		<p>Zip Code: <%= best_in_place @user, :zip_code %></p>
+		<p>Birthdate: <%= best_in_place @user, :birthday %>
+
+			Add new Credit Card
+			<%= form_for @user do |f| %>
+			  <% if @user.errors.any? %>
+			    <div class="error_messages">
+			      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+			      <ul>
+			      <% @user.errors.full_messages.each do |msg| %>
+			        <li><%= msg %></li>
+			      <% end %>
+			      </ul>
+			    </div>
+			  <% end %>
+
+			  <div class="field">
+			    <%= radio_button_tag :pay_with, :card, true %>
+			    <%= label_tag :pay_with_card do %>
+			      <%= image_tag "visa.png" %>
+			      <%= image_tag "mastercard.png" %>
+			      <%= image_tag "discover.png" %>
+			      <%= image_tag "american_express.png" %>
+			      <%= image_tag "jcb.png" %>
+			  </div>
+			  <% end %>
+
+			  <div id="billing_fields">
+			    <div class="field">
+				  <%= f.hidden_field :user_id, :value => current_user.id %> 
+			      <%= f.label :email %>
+			      <%= f.text_field :email %>
+			    </div>
+			
+			      <div class="field">
+			        <%= label_tag :scardnumber, "Credit Card Number" %>
+			        <%= text_field_tag :scardnumber, nil, name: nil %>
+			      </div>
+			      <div class="field">
+			        <%= label_tag :scvc, "Security Code on Card (CVV)" %>
+			        <%= text_field_tag :scvc, nil, name: nil %>
+			      </div>
+			      <div class="field">
+			        <%= label_tag :sexp_month, "Card Expiration" %>
+			        <%= select_month nil, {add_month_numbers: true}, {name: nil, id: "sexp_month"} %>
+			        <%= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, {name: nil, id: "sexp_year"} %>
+			      </div>
+			    <div id="stripe_error">
+			      <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+			    </div>
+			    <div class="actions">
+			      <%= f.submit "Update Card" %>
+			    </div>
+			  </div>
+			<% end %>

@@ -1,0 +1,11 @@
+<% if current_user.following?(@user) %>
+  <%= link_to relationships_set_follow_path(:user_id => @user.id, :follow => false), class: 'profile_btn save_btn', remote: true do %>
+    <%= image_tag 'start_icon.png' %>
+    <span>Unfollow</span>
+  <% end %>
+<% else %>
+  <%= link_to relationships_set_follow_path(:user_id => @user.id, :follow => true), class: 'profile_btn save_btn', remote: true do %>
+    <%= image_tag 'start_icon.png' %>
+    <span>Favorite</span>
+  <% end %>
+<% end %>

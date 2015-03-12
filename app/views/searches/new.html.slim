@@ -1,0 +1,66 @@
+.row style='#{random_background};margin:0;float:left;width:100%;'
+  .wrapper
+    #top_sec
+        fieldset
+          .search_box
+            h1 Search and find a mate.
+            = form_tag searches_path, method: :get do
+              span.secrch_box_bg
+                input.text_input name='search' type="text" placeholder="e.g (female), likes dogs, has a job)"
+                input.find_btn type="submit" value="Find" /
+          h4
+            | or use our
+            a.adv_search href="#" 
+              = image_tag "adv_link.png"
+              span Advanced Search
+            = form_for @search do |f|
+              .form_container
+                .row
+                  .col
+                    label I am a
+                    select.large
+                      option Female
+                      option Male
+                  .select2
+                    .col.col2
+                      label Seeking
+                      = f.select :gender, %w(Female Male)
+                  .row style='padding-top:20px;'
+                  .select1
+                    .col.col3.col33 style='width:175px;'
+                      label Ages
+                      = f.select :min_age, options_for_select((18..50),25), {}, {class: 'small'}
+                  .select5
+                    .col.col4
+                      label to
+                      = f.select :max_age, options_for_select((20..50),45), {}, {class: 'small'}
+                  .select4
+                    .col.col7 style='margin-left: 10px;width:233px;'
+                      = f.select :ethnicity, ['Asian', 'Biracial', 'Indian', 'Hispanic/Latin', 'Middle Eastern', 'Native American', 'Pacific Islander', 'White', 'Other'], prompt: 'Ethnicity'
+                .row style='padding-top:20px;'
+                  .col.col5 style='margin-right:18px;'
+                    label Near
+                    = f.text_field :zip_code,placeholder: "enter zip here", class: 'text_input'
+                  .col.col.col30 style='width:190px;'
+                    = f.select :children, ['I want kids now','I want one someday'], prompt: 'child preference'
+
+                  .select5
+                    .col.col3.col31 style='width:100px;'
+                      = f.select :religion, ['Agnostic', 'Atheist', 'Christian', 'Catholic', 'Buddhist', 'Hindu', 'Jewish', 'Muslim', 'Spiritual without affiliation', 'Other', 'None', 'Prefer not to say'], prompt: 'Religion'
+                  
+                .btm_sec
+                  ul.form_list
+                    li
+                      a href="#" 
+                        = image_tag "form_icon1.png"
+                        span.color Save this Search
+                    li
+                      a href="#" 
+                        = image_tag "form_icon2.png"
+                        span Load
+                    li
+                      a href="#" 
+                        = image_tag "form_icon3.png"
+                        span Reset
+                  input.find_btn type="submit" value="Find" /
+              .btm_search_detail

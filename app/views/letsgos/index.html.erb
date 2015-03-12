@@ -1,0 +1,74 @@
+<div id='letsgo' style="margin-left: 20px;">
+TAG: <%= link_to "Eat/Drink", letsgos_eatdrink_path %> | <%= link_to "Listen/Watch", letsgos_listenwatch_path %> | <%= link_to "Play", letsgos_play_path %> | <%= link_to "Explore", letsgos_explore_path %> | <%= link_to "Other", letsgos_other_path %>
+<br/>
+
+<% for letsgo in @letsgos %>
+
+<li class="stream-card-search stream-card imp" data-imp-position="0" data-imp="95341" data-user="vicky09">
+	<div class="media">
+		<div class="media-snapshot">
+			<a href="<%= user_url(letsgo.user)%>"><img alt="" class="media-avatar" height="100" src="<%= letsgo.user.avatar.try(:image_url,:profile) %>" width="100">
+			</a>
+			<dl class="media-meta">
+				<dt class="user-login">
+					<a href="<%= user_url(letsgo.user)%>"><%= letsgo.user.username %></a>
+				</dt>
+				<dd class="user-meta">
+					<%= letsgo.user.age %>, <%= letsgo.user.gender.first %>, <%= letsgo.user.sexuality %>
+				</dd>
+				<dd class="user-location">
+					<%= letsgo.user.location.city %>, <%= letsgo.user.location.state %>
+				</dd>
+			</dl>
+		</div>
+
+		<div class="media-content">
+
+		<div class="card-content-proposition card-content">
+		<blockquote> 
+			<span class="card-header haw-leader">
+				How about we…
+			</span>
+			<span class="date-description">
+				<%= letsgo.content %>
+			</span>
+			</blockquote>
+		</div>
+
+		<div class="date-card-info card-info">
+			<span class="timestamp right">Reposted over <abbr class="timeago" title="<%= letsgo.user.updated_at %>"></abbr> </span>
+		</div>
+
+		<div class="date-card-actions card-actions">
+			<div class="contact right">
+			<% unless current_user?(letsgo.user) %>
+                  <%= link_to "I'm Interested", interested_letsgo_path(letsgo), method: :message, :class => "button skinny" %>
+                  <%= link_to "repost", repost_letsgo_path(letsgo), method: :post, :class => "button skinny" %>
+              <% end %>
+              <% if current_user?(letsgo.user) %>
+                  <%= link_to "delete", letsgo, method: :delete, data: { confirm: "You sure?" }, :class => "button skinny" %>
+              <% end %>
+			</div>
+			<div class="favorite left">
+			</div>
+		</div>
+	</div>
+</div>
+</li>
+<% end %>
+<% if @page > 1 %>
+<form action="/letsgos">
+    <input type="hidden" name='page' value= '<%= @page-2 %>'/>
+    <input class="btn btn-success btn-block" type="submit" value="Go to Previous Page">
+</form>
+<% end %>
+
+<% if @letsgos.present? %>
+<form action="/letsgos">
+    <input type="hidden" name='page' value= '<%= @page %>'/>
+    <input class="btn btn-success btn-block" type="submit" value="Go to Next Page">
+</form>
+<% end %>
+
+
+</div>

@@ -1,0 +1,165 @@
+.row style='#{random_background};margin:0;float:left;width:100%;'
+  .wrapper
+    #top_sec
+        fieldset
+          .search_box
+            h1 Search and find a mate.
+            = form_tag searches_path, method: :get do
+              span.secrch_box_bg
+                input.text_input name='search' type="text" placeholder="e.g (female), likes dogs, has a job)"
+                input.find_btn type="submit" value="Find" /
+          h4
+            | or use our
+            a.adv_search href="#" 
+              = image_tag "adv_link.png"
+              span Advanced Search
+        .advanced_search_div.hide
+          = form_tag searches_path, method: :get do
+              .form_container
+                .row style='padding-top: 20px !important;'
+                  .col
+                      label I am a
+                  
+                      = select_tag :sexuality, options_for_select(['Straight', 'Gay', 'Bisexual'])
+                   
+             
+                  .select2
+                    .col style="width:60px;"
+					  label Seeking 
+					.col5 style="float:left;" 
+                      = select_tag :gender, options_for_select([['Men','Male'], ['Women', 'Female']]), multiple: true, class: "SlectBox", id: "gender"
+                .row      
+				  .select1
+					.col.col3.col33 style='width:175px;'
+					  label Ages
+					  = select_tag :min_age, options_for_select((18..65),18), {class: 'small'}
+
+				  .select5
+					.col.col4
+					  label to
+					  = select_tag :max_age, options_for_select((20..65),65), {class: 'small'}
+                
+                  .select4
+                  .col5 style="float:left; margin-left:15px; width: 245px;"
+                      = select_tag :ethnicity, options_for_select(['Asian', 'Black', 'Biracial', 'Indian', 'Hispanic/Latin', 'Middle Eastern', 'Native American', 'Pacific Islander', 'White', 'Other']), multiple: true, class: "SlectBox", id: "ethnicity"
+                      
+                .row
+                  .col.col5 style='margin-right:18px;'
+                    label Near
+                    = text_field_tag :zip_code, nil, placeholder: "enter zip here", class: 'text_input'
+                    
+				  .col5 style="width: 180px; float:left;"
+					= select_tag :children, options_for_select(['I want kids now','I want one someday', 'Yes they live with me']), multiple: true, class: "SlectBox", id: "children"
+              
+        
+                  .select5
+                    
+					  = select_tag :religion, options_for_select(['Agnostic', 'Atheist', 'Christian', 'Catholic', 'Buddhist', 'Hindu', 'Jewish', 'Muslim', 'Other']), multiple: true, class: "SlectBox", id: "relegion"
+                      
+                .btm_sec style='margin-top:20px;'
+                  ul.form_list
+                    li
+                      a href="#" 
+                        = image_tag "form_icon1.png"
+                        span.color Save this Search
+                    li
+                      a href="#" 
+                        = image_tag "form_icon2.png"
+                        span Load
+                    li
+                      a href="#" 
+                        = image_tag "form_icon3.png"
+                        span Reset
+                  input.find_btn type="submit" value="Find" /
+              .btm_search_detail
+                a.simple_search href="#" 
+                  = image_tag  "simple_search_icon.png" 
+                  span Simple Search
+
+  #btm_container
+    .wrapper
+      .box_detail
+        = render collection: @users, partial: 'users/user', as: :user
+	  - if params[:controller] == "users"
+		button onclick="getMoreRecords(); return false;" id='more_button' /
+	input name='more' type='hidden' value='2' id='more_users'
+  #message_me.mfp-hide 
+    center
+      .message_div
+        = form_tag messages_path, method: :post, remote: true, class:'form-horizontal',id: 'message_form', role: 'form'
+          = hidden_field_tag :user, nil
+          .form-group
+            = hidden_field_tag :subject, "#{@current_user} messaged you", class: 'form-control' 
+          .form-group
+            = label_tag :body, 'Your Message', class: 'control-label'
+            = text_area_tag :body, nil, class: 'form-control' 
+          br
+          = submit_tag 'Send Message', class: 'btn btn-primary'
+  #report_me.mfp-hide
+    center
+      .message_div
+        = render 'contacts/form'
+  #contact_me.mfp-hide
+    center
+      .message_div
+        = render 'contacts/form'
+  #follow_div.mfp-hide
+    center
+      .message_div#follow_user
+  javascript:
+    $('.common_box').mouseenter(function(){
+      $(this).find('.btn_link').show()
+    }).mouseleave(function(){
+      $(this).find('.btn_link').hide()
+    })
+    $('.message_btn').magnificPopup()
+    $('.report_btn').magnificPopup()
+    $('.message_btn').click(function(){
+      var user_id = $(this).data('user');
+      $('#user').val(user_id);
+    })
+    $('form#message_form').bind('ajax:success', function(evt, data, status, xhr){
+        $.magnificPopup.close()  
+      })
+    $('.save_btn').magnificPopup()
+    $(window).scroll(function() {
+	   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+	   if ($('#more_button').is(':visible')) {
+         $('#more_button').trigger('click');
+        }
+	   }
+	});
+	
+	function getMoreRecords(){
+		var pageOffset = $('#more_users').val();
+		$('#more_button').hide();
+		var url = "/users?"+"page=" + pageOffset;
+		$.ajax({
+			url: url,
+			method: 'GET',
+			success: function(html_data){
+				// make jQuery object from HTML string
+				var $moreBlocks = jQuery( html_data );
+				// Append new blocks
+				$(".box_detail").append( $moreBlocks );
+
+				// Have Masonry position new blocks
+				$(".box_detail").masonry( 'appended', $moreBlocks );         
+				Cufon.refresh();
+				$( ".common_box.box1" ).mouseenter(function() {
+				  $(this).find(".btn_link").show();
+				}).mouseleave(function() {
+				  $(this).find(".btn_link").hide();
+				});
+				if($moreBlocks.length == 4){
+					$('#more_users').val((parseInt(pageOffset) + 1));
+					$('#more_button').show();
+				}
+			}
+
+		});
+	 }
+	 
+	 $("#relegion, #gender, #children, #ethnicity").on('change', function(){
+		return false;		
+	 });

@@ -1,0 +1,24 @@
+Messages Statistics
+<p>
+<%= link_to "Users", admin_users_path %> | <%= link_to "Subscriptions", admin_subscriptions_path %> | <%= link_to "Lets Go's Dates", admin_letsgo_path %> | <%= link_to "Question & Answers", admin_qanda_path %> | <%= link_to "Pictures", admin_pictures_path %>     
+<p>
+	
+		<div class="row">
+		  <div class="col-xs-6">
+		    <b>Messages By Day<b>
+		    <%= line_chart Notification.group_by_day(:created_at).count %>
+			<b>Messages By Month<b>
+		    <%= line_chart Notification.group_by_month(:created_at).count %>
+		  </div>
+
+		</div>
+		<P>
+		<P>
+		<%= Notification.count %> total Messages
+		<p>
+			<%= Notification.count %> total Messages
+<p>
+	<%= User.total_male_messages %> Total Male Messages
+	<p>
+		<%= User.total_female_messages %> Total Female Messages
+		
