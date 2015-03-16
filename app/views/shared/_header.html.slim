@@ -3,14 +3,13 @@
   #header style="height: 30px;"
     .wrapper
       .login_sec
-        .main_dropdown style="float: right;width: 60%;margin: 0 37px 0 0;"
-          a href="" 
+        .main_dropdown style="float: right;width: 35%;margin: 0 37px 0 0;"
+          a href="" style="float:right;"
             - if current_user.avatar.present?
 			    =image_tag "#{current_user.avatar.try(:image_url,:profile)}", :height => "20", :width => "20"
 			- else
 	            =image_tag "login_icon1.png"
             span style="font-size: 13px;line-height: 15px;color: #525d63;padding:0px 5px 0px 5px;"
-              'Welcome, 
               = logged_in_user.username
             =image_tag "profile_link_img.png", class: 'img'
 		  ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="position:relative;"
@@ -24,7 +23,7 @@
 			  a role="menuitem" tabindex="-1" href="#" data-mfp-src="#header_form_div" class="header_add_date"
 				'Post A Date
 			li role="presentation"
-			  a role="menuitem" tabindex="-1" href="#{settings_user_url(current_user)}"
+			  a role="menuitem" tabindex="-1" href="#{settings_user_url(current_user.id)}"
 				'Settings
 			li role="presentation"
 			  a role="menuitem" tabindex="-1" href="#" data-mfp-src="#header_upload_photo" class="header_upload_photo"
@@ -104,7 +103,7 @@ javascript:
       showCloseBtn: true
     });
     
-    $('#header_upload_photo').magnificPopup({
+    $('.header_upload_photo').magnificPopup({
       showCloseBtn: true
     });
   });
