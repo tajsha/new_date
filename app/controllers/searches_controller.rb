@@ -1,5 +1,5 @@
 class SearchesController < ApplicationController
-  
+  before_filter :check_user_login
 
   def new
     @search = Search.new
@@ -35,7 +35,7 @@ class SearchesController < ApplicationController
     if current_user.present?
 		@search = Search.new
 		
-		if params[:gender].present? and params[:search].nil?
+		if params["min_age"].present? and params[:search].present?
 			conditions = {}
 			range_cond = {}
 			  conditions[:gender] = params["gender"].join('|') if params["gender"].present?
@@ -58,11 +58,19 @@ class SearchesController < ApplicationController
 								 end
 			  range_cond[:geodist] = 0.0..100_000.0
 			  conditions[:children] = params["children"].join('|') if params["children"].present?
-			  @users = User.search(:conditions => conditions, 
-						:with => range_cond,
-						:geo => [lat, lng],
-						:order => 'geodist ASC', :without => {:user_id => current_user.id}
-						)
+			  @users = if params[:search].present?
+						  User.search(params[:search], :conditions => conditions, 
+									:with => range_cond,
+									:geo => [lat, lng],
+									:order => 'geodist ASC', :without => {:user_id => current_user.id}
+									)
+					   else
+					       User.search(:conditions => conditions, 
+									:with => range_cond,
+									:geo => [lat, lng],
+									:order => 'geodist ASC', :without => {:user_id => current_user.id}
+									)
+					   end
 		else                    
 			  params[:search] = params[:search] || ''
 			   @users = User.search(params[:search].gsub(/\s+/, ' | '),
@@ -92,6 +100,25 @@ class SearchesController < ApplicationController
 
   def oldest_age
   @oldest_age = params[:oldest_age].years
+   end
+   
+   def save_searches
+   {"utf8"=>"✓", "sexuality"=>"Straight", "min_age"=>"18", "max_age"=>"65", "zip_code"=>"", "search"=>"dogs"}
+     s = current_user.search || Search.new
+     s.gender = params["gender"].join(',') if params["gender"].present?
+     s.min_age = params["min_age"] if params["min_age"].present?
+     s.max_age = params["max_age"]  if params["max_age"].present?
+     s.input_text = params["search"] if params["search"].present?
+     s.religion = params["religion"].join(',') if params["religion"].present?
+     s.children = params["children"].join(',') if params["children"].present?
+     s.ethnicity = params["ethnicity"].join(',') if params["ethnicity"].present?
+     s.user_id = current_user.id
+     s.save
+     redirect_to :back
+   end
+   
+   def check_user_login
+     redirect_to :back unless current_user.present?
    end
    
 end

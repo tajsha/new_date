@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
   # this prevented user from registering as I don't have timezone select on user reg form
   # validates_inclusion_of :time_zone, in: ActiveSupport::TimeZone.zones_map(&:name)
   has_one :subscription
+  has_one :search
   has_many :photos
   has_many :letsgos, dependent: :destroy
   belongs_to :default_photo, :class_name => "Photo"  

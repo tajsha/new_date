@@ -62,7 +62,9 @@ Dating::Application.routes.draw do
       post :avatar
     end
   end
-  resources :searches
+  resources :searches do
+	get 'save_searches', on: :collection
+  end
   resources :sessions,      only: [:new, :create, :destroy]
   resources :relationships, only: [:create, :destroy]
   resources :letsgos, only: [:create, :destroy]

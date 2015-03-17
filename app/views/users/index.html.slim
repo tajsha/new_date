@@ -4,7 +4,7 @@
         fieldset
           .search_box
             h1 Search and find a mate.
-            = form_tag searches_path, method: :get do
+            = form_tag searches_path, method: :get, id: "basic_search" do
               span.secrch_box_bg
                 input.text_input name='search' type="text" placeholder="e.g (female), likes dogs, has a job)"
                 input.find_btn type="submit" value="Find" /
@@ -14,7 +14,7 @@
               = image_tag "adv_link.png"
               span Advanced Search
         .advanced_search_div.hide
-          = form_tag searches_path, method: :get do
+          = form_tag searches_path, method: :get, id: "adv_search" do
               .form_container
                 .row style='padding-top: 20px !important;'
                   .col
@@ -55,11 +55,12 @@
                   .select5
                     
 					  = select_tag :religion, options_for_select(['Agnostic', 'Atheist', 'Christian', 'Catholic', 'Buddhist', 'Hindu', 'Jewish', 'Muslim', 'Other']), multiple: true, class: "SlectBox", id: "relegion"
+					  input.adv_text_input name='search' type="hidden"
                       
                 .btm_sec style='margin-top:20px;'
                   ul.form_list
                     li
-                      a href="#" 
+                      a href="#" id="save_search"
                         = image_tag "form_icon1.png"
                         span.color Save this Search
                     li
@@ -67,7 +68,7 @@
                         = image_tag "form_icon2.png"
                         span Load
                     li
-                      a href="#" 
+                      a href="#" id="reset_form"
                         = image_tag "form_icon3.png"
                         span Reset
                   input.find_btn type="submit" value="Find" /
@@ -93,8 +94,7 @@
           .form-group
             = label_tag :body, 'Your Message', class: 'control-label'
             = text_area_tag :body, nil, class: 'form-control' 
-          br
-          = submit_tag 'Send Message', class: 'btn btn-primary'
+          = submit_tag 'Send', class: 'btn btn-primary'
   #report_me.mfp-hide
     center
       .message_div
@@ -163,3 +163,19 @@
 	 $("#relegion, #gender, #children, #ethnicity").on('change', function(){
 		return false;		
 	 });
+	 
+	 $("input.text_input").on('keyup', function(){
+	   $("input.adv_text_input").val(this.value);
+	 });
+	 
+	 $("#reset_form").on('click', function(){
+	   $("form#adv_search").trigger('reset');
+	   $("form#basic_search").trigger('reset');	 
+	   $("input.adv_text_input").val("");
+	 });
+	 
+	 $("#save_search").on("click", function () {
+          $('form#adv_search').attr('action', "/searches/save_searches");
+          $('form#adv_search').submit();
+          e.preventDefault();
+      });
