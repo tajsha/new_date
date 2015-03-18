@@ -52,6 +52,7 @@ Dating::Application.routes.draw do
   resources :subscriptions
   resources :plans
   get 'paypal/checkout', to: 'subscriptions#paypal_checkout'
+  get 'paypal/subscription', to: 'subscriptions#paypal_subscription_record', :as => 'paypal_subscription_create'
  
   resources :sessions
   resources :contacts, only: [:new, :create]

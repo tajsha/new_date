@@ -23,6 +23,24 @@ class SubscriptionsController < ApplicationController
       render :new
     end
   end
+  
+  def paypal_subscription_record
+	@user = current_user
+	plan_id = params[:plan_id] || 1
+	subscription = {"plan_id"=>plan_id, 
+					 "stripe_card_token"=>"", 
+					 "paypal_customer_token"=>params[:PayerID], 
+					 "paypal_payment_token"=>params[:token], 
+					 "user_id"=>@user.id, 
+					 "email"=>@user.email}
+    @subscription = Subscription.new(subscription)
+    if @subscription.save_with_payment
+      UserMailer.subscriber(@user).deliver
+      redirect_to @subscription, :notice => "Thank you for subscribing!"
+    else
+      render :new
+    end
+  end
 
   def show
     @subscription = Subscription.find(params[:id])
@@ -33,7 +51,7 @@ class SubscriptionsController < ApplicationController
     plan = Plan.find(params[:plan_id])
     subscription = plan.subscriptions.build
     redirect_to subscription.paypal.checkout_url(
-      return_url: new_subscription_url(:plan_id => plan.id),
+      return_url: paypal_subscription_create_url(:plan_id => plan.id),
       cancel_url: root_url
     )
   end
