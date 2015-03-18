@@ -1,3 +1,5 @@
+p.flash
+  = flash[:notice]
 .wrapper
   #profile_container
     .profile_top
@@ -254,7 +256,8 @@ javascript:
       showCloseBtn: true
     });
     $('form#message_form').bind('ajax:success', function(evt, data, status, xhr){
-      $.magnificPopup.close()  
+      $.magnificPopup.close();
+      $('p.flash').text(data.notice);
     })
     $('.ask_btn').magnificPopup({
       showCloseBtn: true
@@ -263,7 +266,8 @@ javascript:
       showCloseBtn: true
     });
     $('form#question_form').bind('ajax:success', function(evt, data, status, xhr){
-      $.magnificPopup.close()  
+      $.magnificPopup.close();
+      $('p.flash').text(data.notice);
     })
     $('.report_btn').magnificPopup()
     $('.right_arrow').click(function(e){
@@ -322,4 +326,5 @@ javascript:
   $('a.see_more').click(function(){
     $('.letsgo_li').removeClass('hide');
     $(this).parent().remove();
-  })
+  });
+

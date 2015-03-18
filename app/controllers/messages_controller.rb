@@ -14,7 +14,11 @@ class MessagesController < ApplicationController
     @recipient = User.find(params[:user])
     current_user.send_message(@recipient, params[:body], params[:subject])
     flash[:notice] = "Message has been sent!"
-    redirect_to :conversations
+    if request.xhr?
+		render :json => {:notice => flash[:notice]}
+    else
+		redirect_to :conversations
+	end
   end
   
   def askout
